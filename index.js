@@ -96,11 +96,8 @@ class StartScreen extends GameState{
         ctx.restore()
     }
 }
-
-
 //const game=new Game()
 //game.init()  
-    
 
 
 
