@@ -7,7 +7,7 @@ canvas.height=576
 const backgroundImg = new Image()
 backgroundImg.src="/img/background.jpg"
 
-backgroundImg.onload = () => draw() 
+//backgroundImg.onload = () => draw() 
 
 function draw(){
     c.drawImage(backgroundImg,0,0)
@@ -62,42 +62,17 @@ function handleInput() {
         thrustVector.z+=0.00017
     }
 }
-gameloop()
+
+const game=new Game()
+game.init()
+//game.currentState.background2.draw()
+//console.log(game.currentState)
+
+//gameloop()
 //EventListeners for Inputs
 
-  class GameState{
-    constructor(game)
-    {
-        this.game=game
-    }
-    onEntry(){
-        const temp = this.game.test
-        console.log(temp)
-    }
-    onExit(){
-    }
-}
-class StartScreen extends GameState{
-    constructor(game){
-        super(game)
-    }
-    onEntry(){
-        this.run()
-    ctx.fillStyle = 'gray';
-    ctx.fillRect(80, 60, 140, 30);
-    const temp = this.game.test
-    console.log(this.game.test)
-    }
-    onExit(){
-    }
-    run(){
-        ctx.save()
 
-        ctx.restore()
-    }
-}
-//const game=new Game()
-//game.init()  
+  
 
 
 

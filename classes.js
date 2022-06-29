@@ -13,10 +13,10 @@ class Sprite{
         this.accelartion=accelartion
         this.image=image
         this.image.onload = () => {
-            this.width=this.image.width*scale
+            this.width=this.image.width*scale,
             this.heigth=this.image.height*scale
         }
-        this.image.scr=image.src
+        //this.image.scr=image.src
         this.animate = animate
         this.sprites = this.sprites
         this.scale=scale
@@ -86,6 +86,42 @@ class Ship extends Sprite{
     }
 }
 
+
+
+class GameState{
+    constructor(game)
+    {
+        this.game=game
+    }
+    onEntry(){
+        const temp = this.game.test
+        console.log(temp)
+    }
+    onExit(){
+    }
+}
+class StartScreen extends GameState{
+    constructor(game){
+        super(game)
+        this.backgroundImg=new Image()
+        this.backgroundImg.src="/img/startscreen.png"
+        this.backround2=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
+    }
+    onEntry(){
+        this.run()
+    }
+    onExit(){
+    }
+    run(){
+        c.save()
+        const animationId=window.requestAnimationFrame(this.run.bind(this))
+        this.backround2.draw()
+        c.restore()
+    }
+    loop_(){
+        
+    }
+}
 class LevelSelectScreen extends GameState{
     constructor(){
         super()
@@ -101,7 +137,6 @@ class Mission extends GameState{
     }
     onEntry(){}
 }
-
 class Game{
     constructor()
     {
