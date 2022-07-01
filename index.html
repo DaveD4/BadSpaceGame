@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
+        * {
+            font-family: 'Permanent Marker', cursive;
+        }
         body{
-            background-color: black;
+            background-color: rgb(197, 197, 197);
         }
     </style>
 </head>
 <body>
-    <div>
-        <canvas></canvas>
+        <canvas ></canvas>
+       
+    <div id="StartScreen"
+        style="
+            position: absolute;
+            margin: 8px;
+            top: 0px;
+            left:0px;
+            width: 1024px;
+            height: 576px;
+            display:flex;
+            flex-direction: row;
+            justify-content:center ;
+            ">
+        <div>
+            <div 
+            id="Title"
+            style="
+                border: 10px solid black;
+                border-radius: 10px;
+                margin: 50px;
+                background-color: coral;
+                ">
+            <h1 style="padding:10px"> Asteroid Destroyer</h1> 
+        </div>
+        <div 
+            id="StartButton"
+            style="
+                border: 10px solid black;
+                border-radius: 10px;
+                margin: 50px;
+                ">
+            <h1>Play</h1>
+        </div>
     </div>
+        
+  
 </body>
 <script src="inputHandler.js"></script>
 <script src="classes.js"></script>

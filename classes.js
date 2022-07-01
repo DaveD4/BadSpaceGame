@@ -103,18 +103,32 @@ class GameState{
 class StartScreen extends GameState{
     constructor(game){
         super(game)
+        this.animationId=0
         this.backgroundImg=new Image()
         this.backgroundImg.src="/img/startscreen.png"
         this.backround2=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
     }
     onEntry(){
+        document.querySelector('#StartScreen').style.display='flex'
+        //const button= document.createElement('button')
+        //document.querySelector('#StartButton').append(button)
+        const startButton=document.querySelector('#StartButton')
+        startButton.addEventListener('click', (e) => {
+            this.onExit()
+            //console.log(e)
+        })
         this.run()
     }
     onExit(){
+        window.cancelAnimationFrame(this.animationId)
+        document.querySelector('#StartScreen').style.display='none'
+        this.game.currentState=new Mission(this.game)
+        this.game.currentState.onEntry()
+        this.game.currentState.run()
     }
     run(){
         c.save()
-        const animationId=window.requestAnimationFrame(this.run.bind(this))
+        this.animationId=window.requestAnimationFrame(this.run.bind(this))
         this.backround2.draw()
         c.restore()
     }
@@ -132,10 +146,26 @@ class LevelSelectScreen extends GameState{
     }
 }
 class Mission extends GameState{
-    constructor(){
-        super()
+    constructor(game){
+        super(game)
+        this.animationId=0
+        this.backgroundImg=new Image()
+        this.backgroundImg.src="/img/background.jpg"
+        this.backround=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
+        this.playerShipImage=new Image()
+        this.playerShipImage.src="/img/playership.png"
+        this.playerShip=new Ship({position:{x:100,y:100,rotation:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:playerShipImage,dampning:0.001})
     }
-    onEntry(){}
+    onEntry(){
+    }
+    run(){
+    this.animationId=window.requestAnimationFrame(this.run.bind(this))
+    this.backround.draw()
+    handleInput()
+    this.playerShip.control(thrustVector)
+    this.playerShip.update()
+    this.playerShip.draw()
+    }
 }
 class Game{
     constructor()
