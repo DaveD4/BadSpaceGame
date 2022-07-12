@@ -22,6 +22,7 @@ class Sprite{
         this.scale=scale
     }
     draw(){
+        console.log(this.width)
         c.save()
         c.translate(
             this.position.x+this.width/2,
@@ -74,7 +75,6 @@ class Ship extends Sprite{
         this.position.x+=this.velocity.x
         this.position.y+=this.velocity.y
         this.position.rotation=(this.position.rotation+this.velocity.vRotation)%(2*Math.PI)
-        console.log(this.velocity)
     }
     control(thrustVector){
         //const rotationInDegree=this.position.rotation*180/Math.PI
@@ -84,6 +84,7 @@ class Ship extends Sprite{
         this.accelartion.y=sinPhi*thrustVector.x+cosPhi*thrustVector.y 
         this.accelartion.z=thrustVector.z
     }
+    
 }
 
 
@@ -154,7 +155,7 @@ class Mission extends GameState{
         this.backround=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
         this.playerShipImage=new Image()
         this.playerShipImage.src="/img/playership.png"
-        this.playerShip=new Ship({position:{x:100,y:100,rotation:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:playerShipImage,dampning:0.001})
+        this.playerShip=new Ship({position:{x:100,y:100,rotation:Math.PI/2},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.playerShipImage,dampning:0.001})
     }
     onEntry(){
     }
