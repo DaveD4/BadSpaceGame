@@ -36,6 +36,14 @@ class Sprite{
         c.drawImage(this.image,this.position.x,this.position.y)
         c.restore()
     }
+    update(){
+        this.velocity.x=this.velocity.x+this.accelartion.x
+        this.velocity.y=this.velocity.y+this.accelartion.y
+        this.velocity.vRotation=this.velocity.vRotation+this.accelartion.z 
+        this.position.x+=this.velocity.x
+        this.position.y+=this.velocity.y
+        this.position.rotation=(this.position.rotation+this.velocity.vRotation)%(2*Math.PI)
+    }
 }
 
 
@@ -49,6 +57,7 @@ class Ship extends Sprite{
         scale=1,
         health,
         dampning=0,
+        renderObjects=[],
     })
     {
         super({
@@ -69,6 +78,9 @@ class Ship extends Sprite{
         this.thrustVector={x:0,y:0,z:0}
         this.weaponCooldown=50
         this.weaponLastFired=0
+        this.laserSpriteImg=new Image()
+        this.laserSpriteImg.src="/img/shot_01.png"
+        this.renderObjects=renderObjects
     }
     update(){
         this.control_()
@@ -92,6 +104,10 @@ class Ship extends Sprite{
         if (((frameId-this.weaponLastFired) > this.weaponCooldown)) {
             this.weaponLastFired=frameId
             console.log('Fire')
+            let shotSprite=new Sprite({position:{x:this.position.x,y:this.position.y,rotation:this.position.rotation},velocity:{x:0,y:0,z:0},accelartion:{x:0,y:0,z:0},image:this.laserSpriteImg})
+            //console.log(this.renderObjects)
+            this.renderObjects.push(shotSprite)
+
         }
         else{
             //console.log('Weapons cooldown'+((frameId-this.weaponLastFired) % this.weaponCooldown))
@@ -169,7 +185,8 @@ class Mission extends GameState{
         this.backround=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
         this.playerShipImage=new Image()
         this.playerShipImage.src="/img/playership.png"
-        this.playerShip=new Ship({position:{x:100,y:100,rotation:Math.PI/2},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.playerShipImage,dampning:0.001})
+        this.renderObjects=[]
+        this.playerShip=new Ship({position:{x:100,y:100,rotation:Math.PI/2},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.playerShipImage,dampning:0.001,renderObjects:this.renderObjects})
         //this.InputHandler=new this.InputHandler
     }
     handleInput(playership) {
@@ -200,12 +217,18 @@ class Mission extends GameState{
     }
     onEntry(){
     }
+
     run(){
     this.animationId=window.requestAnimationFrame(this.run.bind(this))
     this.backround.draw()
     this.handleInput(this.playerShip)
+    this.renderObjects.forEach(element => {
+        element.update()
+        element.draw()
+    });
     this.playerShip.update()
     this.playerShip.draw()
+    console.log(this.renderObjects)
     }
 
 }
