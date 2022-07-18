@@ -8,7 +8,8 @@ class Sprite{
         scale=1,
         lifetime=-1,
         renderObjects=[],
-        health=1
+        health=1,
+        id,
     })
     {
         this.position=position
@@ -28,6 +29,7 @@ class Sprite{
         this.renderObjects=renderObjects
         this.lifetime=lifetime
         this.health=health
+        this.id=id
     }
     draw(){
         //console.log(this.width)
@@ -117,7 +119,7 @@ class AsteroidSpawner extends Spawner{
         this.playerShip=playerShip
         this.asteroidList=[]
         this.asteroidList_temp=[]
-        this.maxAsteroids=60
+        this.maxAsteroids=80
         this.maxVelocity=0.2
         this.maxDistance=2000.0
     }
@@ -132,6 +134,11 @@ class AsteroidSpawner extends Spawner{
             i++
         })
     }
+
+    distanceToRectangle(rectangle1,rectangle2){
+        return Math.sqrt(Math.pow(rectangle1.position.x-rectangle2.position.x,2)+Math.pow(rectangle1.position.y-rectangle2.position.y,2))
+    }
+
     spawn(){
         if (this.asteroidList.length<5){
             for (let index = 0; index < 4; index++) {
@@ -151,22 +158,41 @@ class AsteroidSpawner extends Spawner{
         }
         else if(this.asteroidList.length<this.maxAsteroids){
             let rnd1=Math.random()    
-            const position_X=(rnd1*2-1)*canvas.width+this.playerShip.position.x+((rnd1-1>0)*2-1)*canvas.width
+            //const position_X=(rnd1*2-1)*canvas.width+this.playerShip.position.x+((rnd1-1>0)*2-1)*canvas.width
+            const position_X=this.playerShip.position.x+(((rnd1*2-1>0)*2-1)+(rnd1*2-1))*canvas.width
+            console.log(position_X-this.playerShip.position.x<0)
             let rnd2=Math.random()
-            const position_Y=(rnd2*2-1)*canvas.height+this.playerShip.position.y+((rnd2-1>0)*2-1)*canvas.height
+            //const position_Y=(rnd2*2-1)*canvas.height+this.playerShip.position.y+((rnd2-1>0)*2-1)*canvas.height
+            const position_Y=this.playerShip.position.y+(((rnd2*2-1>0)*2-1)+(rnd2*2-1))*canvas.height
             const rotation=Math.random()*Math.PI
             const velocity_X=(Math.random()*2-1)*this.maxVelocity
             const velocity_Y=(Math.random()*2-1)*this.maxVelocity
             const asteroid2=new Sprite({position:{x:position_X,y:position_Y,rotation:rotation},velocity:{x:velocity_X,y:velocity_Y,vRotation:(Math.random()*2-1)*0.001},accelartion:{x:0,y:0,z:0},image:this.image,renderObjects:this.objectList,lifetime:-1})
             
-            this.asteroidList.push(asteroid2)
-            this.objectList.push(asteroid2)
-            console.log("Spawned Asteroid")
+            let positionIsOccupied=0
+            this.asteroidList.every(element => {
+                
+                if (this.distanceToRectangle(asteroid2,element)<400){
+                    positionIsOccupied=1
+                    return false
+                }
+            });
+
+            if (positionIsOccupied==0){
+                this.asteroidList.push(asteroid2)
+                this.objectList.push(asteroid2)
+                //console.log("Spawned Asteroid")
+            }
+            else{
+                console.log("didn't spawn as place occupied")
+            }
+            
+            //console.log(this.playerShip.position)
         }
         
         this.asteroidList.forEach(element => {
             let distanceToPlayer = Math.sqrt(Math.abs((element.position.x-this.playerShip.position.x))+Math.pow(element.position.y-this.playerShip.position.y,2))
-            console.log(this.maxDistance<distanceToPlayer)
+            //console.log(this.maxDistance<distanceToPlayer)
             //console.log(Math.pow(this.maxDistance,2)-distanceToPlayer)
             if (distanceToPlayer>this.maxDistance||element.health<=0){
                 console.log("Deleted Asteroid")
@@ -175,10 +201,12 @@ class AsteroidSpawner extends Spawner{
                 this.removeElementfromArray(this.asteroidList,element)
             }
         });
+
         
+
         
         //console.log(this.asteroidList.length)
-        console.log("AsteroidList:"+this.asteroidList.length)
+        //console.log("AsteroidList:"+this.asteroidList.length)
     }
 }
 
@@ -210,10 +238,10 @@ class Ship extends Sprite{
         //this.image.src=image.src
         this.dampning=dampning
         this.thrustVector={x:0,y:0,z:0}
-        this.weaponCooldown=50
+        this.weaponCooldown=20
         this.weaponLastFired=0
-        this.weaponSpeed=1
-        this.weaponLifeTime=500
+        this.weaponSpeed=2
+        this.weaponLifeTime=700
         this.laserSpriteImg=new Image()
         this.laserSpriteImg.src="/img/shot_01.png"
             
@@ -246,7 +274,7 @@ class Ship extends Sprite{
             //console.log(cosPhi)
             const x_velocity=cosPhi*this.weaponSpeed+this.velocity.x
             const y_velocity=sinPhi*this.weaponSpeed+this.velocity.y
-            let shotSprite=new Sprite({position:{x:this.position.x+this.width/2,y:this.position.y+this.height/2,rotation:this.position.rotation},velocity:{x:x_velocity,y:y_velocity,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.laserSpriteImg,lifetime:this.weaponLifeTime,renderObjects:this.renderObjects})
+            let shotSprite=new Sprite({position:{x:this.position.x+this.width/2,y:this.position.y+this.height/2,rotation:this.position.rotation},velocity:{x:x_velocity,y:y_velocity,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.laserSpriteImg,lifetime:this.weaponLifeTime,renderObjects:this.renderObjects,id:"weaponShell"})
             //console.log(shotSprite.position.rotation)
             this.renderObjects.push(shotSprite)
 
@@ -331,6 +359,7 @@ class StartScreen extends GameState{
         
     }
 }
+//not implemented, there is only one level
 class LevelSelectScreen extends GameState{
     constructor(){
         super()
@@ -338,6 +367,36 @@ class LevelSelectScreen extends GameState{
     onEntry(){
         ctx.fillStyle = 'red';
         ctx.fillRect(80, 60, 140, 30);
+    }
+}
+class ScoreBoard{
+    constructor(domElement){
+        this.scoreBoard=domElement
+        this.score=0
+        this.maxScoreDigitLength=4
+    }
+    increaseScore(number){
+        this.score+=number
+    }
+    countDigit_(n){
+        if (n==0) {
+            return 1
+        } else {
+            return Math.floor(Math.log10(n) + 1);
+        }
+    }
+    scoreToString_(){
+        const digitCount=this.countDigit_(this.score)
+        let scoreString=""
+        for (let index = 0; index < this.maxScoreDigitLength-digitCount; index++) {
+            scoreString+="0";
+        }
+        const scoreCapped=this.score%Math.pow(10,this.maxScoreDigitLength)
+        scoreString+=scoreCapped
+        return scoreString
+    }
+    update(){
+        this.scoreBoard.innerHTML=(this.scoreToString_())
     }
 }
 class Mission extends GameState{
@@ -351,6 +410,7 @@ class Mission extends GameState{
         this.playerShipImage.src="/img/playership.png"
         this.renderObjects=[]
         this.playerShip=new Ship({position:{x:canvas.width/2,y:canvas.height/2,rotation:Math.PI/2},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.playerShipImage,dampning:0.001,renderObjects:this.renderObjects})
+        this.scoreBoard=new ScoreBoard(document.querySelector('#Score'))
         //this.asteroidImg=new Image()
         //this.asteroidImg.src="/img/asteroid.png"
         //this.asteroidImg.onload = () => {
@@ -384,10 +444,10 @@ class Mission extends GameState{
             playership.thrustVector.y+=0.0015
         }
         if (keys.ArrowLeft.pressed){
-            playership.thrustVector.z-=0.00017
+            playership.thrustVector.z-=0.0003
         }
         if (keys.ArrowRight.pressed){
-            playership.thrustVector.z+=0.00017
+            playership.thrustVector.z+=0.0003
         }
         if (keys.SpaceBar.pressed){
             playership.fire(this.animationId)
@@ -410,6 +470,9 @@ class Mission extends GameState{
                         collisionObjectList[i].health-=1;
                         collisionObjectList[j].health-=1; 
                         console.log('Collision')
+                        if (collisionObjectList[i].id=="weaponShell") {
+                            this.scoreBoard.increaseScore(1)
+                        }
 
                     }
                 }
@@ -417,6 +480,9 @@ class Mission extends GameState{
         }
     }
     onEntry(){
+        console.log("Started Mission")
+        document.querySelector('#MissionScreen').style.display='flex'
+        document.querySelector('#Controls').style.display='flex'
     }
 
     run(){
@@ -424,7 +490,7 @@ class Mission extends GameState{
     this.background.draw()
     this.background.position.x=this.camera.position.x-canvas.width/2
     this.background.position.y=this.camera.position.y-canvas.height/2
-    
+    //
     this.handleInput(this.playerShip)
     this.asteroidSpawner.spawn()
     //console.log(this.playerShip)
@@ -436,6 +502,9 @@ class Mission extends GameState{
     this.playerShip.update()
     this.playerShip.draw()
     this.handleCollison(this.renderObjects)
+
+    
+    this.scoreBoard.update()
     this.camera.update()
 
     this.particleSpawner.spawn()
@@ -443,13 +512,14 @@ class Mission extends GameState{
         element.update()
         element.draw()
     })
+    
     //console.log(this.particleList)
 
     // camera test
     //c.translate(this.cameraPosition.x,this.cameraPosition.y)
     //this.cameraPosition.x-=0.01
     //this.cameraPosition.y-=0.01
-    console.log("renderList:"+this.renderObjects.length)
+    //console.log("renderList:"+this.renderObjects.length)
     }
 
 }

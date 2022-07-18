@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -7,16 +8,28 @@
         * {
             font-family: 'Permanent Marker', cursive;
         }
-        body{
+
+        body {
             background-color: rgb(197, 197, 197);
         }
     </style>
 </head>
+
 <body>
-        <canvas ></canvas>
-       
-    <div id="StartScreen"
-        style="
+    <div style="
+    position:fixed;
+    display: flex;
+    width: 100%;
+    margin-top: 2%;
+    flex-direction: row;
+    justify-content: center;
+    ">
+    <div style="
+    position:relative;
+    ">
+        <canvas></canvas>
+
+        <div id="StartScreen" style="
             position: absolute;
             margin: 8px;
             top: 0px;
@@ -27,29 +40,77 @@
             flex-direction: row;
             justify-content:center ;
             ">
-        <div>
-            <div 
-            id="Title"
-            style="
+            <div>
+                <div id="Title" style="
                 border: 10px solid black;
                 border-radius: 10px;
                 margin: 50px;
                 background-color: coral;
                 ">
-            <h1 style="padding:10px"> Asteroid Destroyer</h1> 
-        </div>
-        <div 
-            id="StartButton"
-            style="
+                    <h1 style="padding:10px"> Asteroid Destroyer</h1>
+                </div>
+                <div id="StartButton" style="
                 border: 10px solid black;
                 border-radius: 10px;
                 margin: 50px;
                 ">
-            <h1>Play</h1>
+                    <h1>Play</h1>
+                </div>
+            </div>
+        </div>
+
+        <div id="MissionScreen" style="
+            position: absolute;
+            margin: 0px;
+            top: 0px;
+            left:0px;
+            width: 1024px;
+            height: 576px;
+            display:none;
+            flex-direction: column;
+            justify-content:flex-end ;
+            ">
+            <div style="
+            margin: 10px;
+            display:flex;
+            flex-direction: row;
+            justify-content:space-between">
+                <div style="
+                border:5px solid yellow;
+                border-radius:5px;
+                display:flex;
+                flex-direction: row;
+                justify-content:flex-end ;
+                ">
+                    <h2 style="margin:10px;color: chocolate">Score:</h2>
+                    <h2 id="Score" style="margin:10px; color: chocolate;">000</h1>
+                </div>
+            </div>
+        </div>
+        <div id="Controls" style="
+        border:10px solid black;
+        width:1004px;
+        display: none;
+        flex-direction: row;
+        justify-content: space-evenly;
+        ">
+            <div style="margin:0px">
+                <h1>Controls</h1>
+            </div>
+            <div style="
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        ">
+                <h2 style="margin:0px">W,A,S,D: Directional Thrusters</h2>
+                <h2 style="margin:0px">Left/Right ArrowKey: Rotational Thrusters</h2>
+                <h2 style="margin:0px">Spacebar: Fire Weapon</h2>
+            </div>
         </div>
     </div>
-        
-  
+    </div>
+
 </body>
 <script src="inputHandler.js"></script>
 <script src="classes.js"></script>
