@@ -90,7 +90,7 @@ class ParticelSpawner extends Spawner{
     constructor(objectList,playerShip){
         super(objectList)
         this.image=new Image()
-        this.image.src="/img/particle.png"
+        this.image.src=base+"/img/particle.png"
         this.playerShip=playerShip
         this.particleLifetime=700
         this.maxParticles=100
@@ -115,7 +115,7 @@ class AsteroidSpawner extends Spawner{
     constructor(objectList,playerShip){
         super(objectList)
         this.image=new Image()
-        this.image.src="/img/asteroid.png"
+        this.image.src=base+"/img/asteroid.png"
         this.playerShip=playerShip
         this.asteroidList=[]
         this.asteroidList_temp=[]
@@ -243,7 +243,7 @@ class Ship extends Sprite{
         this.weaponSpeed=2
         this.weaponLifeTime=700
         this.laserSpriteImg=new Image()
-        this.laserSpriteImg.src="/img/shot_01.png"
+        this.laserSpriteImg.src=base+"/img/shot_01.png"
             
         //this.renderObjects=renderObjects
     }
@@ -328,7 +328,7 @@ class StartScreen extends GameState{
         super(game)
         this.animationId=0
         this.backgroundImg=new Image()
-        this.backgroundImg.src="/img/startscreen.png"
+        this.backgroundImg.src=base+"/img/startscreen.png"
         this.backround2=new Sprite({position:{x:0,y:0,rotation:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
     }
     onEntry(){
@@ -405,11 +405,11 @@ class Mission extends GameState{
         this.animationId=0
         this.backgroundImg=new Image()
         
-        this.backgroundImg.src="/img/background.png"
+        this.backgroundImg.src=base+"/img/background.png"
         
         this.background=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
         this.playerShipImage=new Image()
-        this.playerShipImage.src="/img/playership.png"
+        this.playerShipImage.src=base+"/img/playership.png"
         this.renderObjects=[]
         this.playerShip=new Ship({position:{x:canvas.width/2,y:canvas.height/2,rotation:Math.PI/2},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.playerShipImage,dampning:0.001,renderObjects:this.renderObjects})
         this.scoreBoard=new ScoreBoard(document.querySelector('#Score'))

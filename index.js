@@ -1,18 +1,21 @@
+let base=""
+isLocalTest=0
+
+
+if (isLocalTest) {
+    base=""
+} else {
+  base="/BadSpaceGame"  
+}
+
+
 const canvas=document.querySelector('canvas')
 const c=canvas.getContext("2d")
 
 canvas.width=1024
 canvas.height=576
 
-const backgroundImg = new Image()
-backgroundImg.src="/img/background.jpg"
 
-//backgroundImg.onload = () => draw() 
-
-function draw(){
-    c.drawImage(backgroundImg,0,0)
-
-}
 
 
 
