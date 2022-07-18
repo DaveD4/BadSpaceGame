@@ -404,7 +404,9 @@ class Mission extends GameState{
         super(game)
         this.animationId=0
         this.backgroundImg=new Image()
+        
         this.backgroundImg.src="/img/background.png"
+        
         this.background=new Sprite({position:{x:0,y:0,z:0},velocity:{x:0,y:0,vRotation:0},accelartion:{x:0,y:0,z:0},image:this.backgroundImg})
         this.playerShipImage=new Image()
         this.playerShipImage.src="/img/playership.png"
@@ -527,7 +529,7 @@ class Game{
     constructor()
     {
         this.lastState=this.currentState
-        this.test="hello"
+      
         this.currentState=new StartScreen(this)
         //this.currentState=new GameState(this)
     }
